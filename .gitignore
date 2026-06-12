@@ -1,0 +1,20 @@
+## .NET / Visual Studio
+bin/
+obj/
+.vs/
+*.user
+*.suo
+artifacts/
+
+## Build output / packages
+*.nupkg
+*.snupkg
+
+## Rider / VS Code
+.idea/
+.vscode/
+
+## Test results
+[Tt]est[Rr]esults/
+coverage/
+*.trx

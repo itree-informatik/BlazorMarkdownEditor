@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="src/BlazorMarkdownEditor/BlazorMarkdownEditor.csproj" />
+  <Project Path="tests/BlazorMarkdownEditor.Tests/BlazorMarkdownEditor.Tests.csproj" />
+</Solution>

@@ -1,0 +1,65 @@
+<div class="bme @(Readonly ? "bme--readonly" : null) @Class">
+    @if (!Readonly)
+    {
+        <div class="bme__tabs" role="tablist">
+            <button type="button"
+                    class="bme__tab @(_activeTab == Tab.Write ? "bme__tab--active" : "")"
+                    role="tab"
+                    aria-selected="@(_activeTab == Tab.Write)"
+                    @onclick="SwitchToWrite">
+                @Labels.WriteTab
+            </button>
+            <button type="button"
+                    class="bme__tab @(_activeTab == Tab.Preview ? "bme__tab--active" : "")"
+                    role="tab"
+                    aria-selected="@(_activeTab == Tab.Preview)"
+                    @onclick="SwitchToPreview">
+                @Labels.PreviewTab
+            </button>
+        </div>
+    }
+
+    @if (Readonly || _activeTab == Tab.Preview)
+    {
+        <div class="bme__preview" id="@_previewId">
+            @if (string.IsNullOrWhiteSpace(Value))
+            {
+                @if (!Readonly)
+                {
+                    <p class="bme__preview-empty">@Labels.NothingToPreview</p>
+                }
+            }
+            else
+            {
+                @((MarkupString)MarkdownConverter.ToHtml(Value))
+            }
+        </div>
+    }
+    else
+    {
+        <div class="bme__toolbar" role="toolbar">
+            @foreach (var tool in _tools)
+            {
+                <button type="button"
+                        class="bme__tool"
+                        title="@tool.Tooltip"
+                        aria-label="@tool.Tooltip"
+                        @onclick="@(() => ApplyToolAsync(tool))">
+                    @((MarkupString)tool.Icon)
+                </button>
+            }
+        </div>
+
+        <textarea id="@_textAreaId"
+                  class="bme__textarea"
+                  value="@Value"
+                  placeholder="@Placeholder"
+                  rows="@Rows"
+                  @oninput="OnInput"></textarea>
+    }
+
+    @if (!Readonly && ValueExpression is not null && CascadedEditContext is not null)
+    {
+        <ValidationMessage For="@ValueExpression" />
+    }
+</div>

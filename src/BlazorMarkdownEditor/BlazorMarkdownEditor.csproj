@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <!-- NuGet package metadata -->
+  <PropertyGroup>
+    <IsPackable>true</IsPackable>
+    <PackageId>BlazorMarkdownEditor</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>itree informatik GmbH</Authors>
+    <Company>itree informatik GmbH</Company>
+    <Product>BlazorMarkdownEditor</Product>
+    <Description>A lightweight Markdown editor component for Blazor with Write/Preview tabs and a formatting toolbar — similar to the GitHub issue editor. No third-party UI or NuGet dependencies; Markdown rendering is built in, syntax highlighting uses a bundled copy of highlight.js (BSD-3-Clause). English defaults that can be overridden for full localization.</Description>
+    <PackageTags>blazor;markdown;editor;component;razor;markdown-editor;wasm</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/itree-informatik/BlazorMarkdownEditor</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/itree-informatik/BlazorMarkdownEditor</RepositoryUrl>
+    <PackageReleaseNotes>Initial release: Write/Preview tabs, formatting toolbar (headings, bold, italic, lists, links, tables), dependency-free Markdown rendering.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

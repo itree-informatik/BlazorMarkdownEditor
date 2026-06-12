@@ -1,0 +1,208 @@
+.bme {
+    --bme-border: #d0d7de;
+    --bme-muted: #656d76;
+    --bme-bg-muted: #f6f8fa;
+    --bme-accent: #0969da;
+
+    border: 1px solid var(--bme-border);
+    border-radius: 6px;
+    overflow: hidden;
+    font-family: inherit;
+}
+
+/* Tabs */
+.bme__tabs {
+    display: flex;
+    gap: 4px;
+    padding: 8px 8px 0 8px;
+    background: var(--bme-bg-muted);
+    border-bottom: 1px solid var(--bme-border);
+}
+
+.bme__tab {
+    appearance: none;
+    border: 1px solid transparent;
+    border-bottom: none;
+    background: none;
+    padding: 6px 14px;
+    font: inherit;
+    cursor: pointer;
+    border-radius: 6px 6px 0 0;
+    color: var(--bme-muted);
+}
+
+.bme__tab:hover {
+    color: inherit;
+}
+
+.bme__tab--active {
+    background: #fff;
+    border-color: var(--bme-border);
+    color: inherit;
+    margin-bottom: -1px;
+}
+
+/* Toolbar */
+.bme__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--bme-border);
+}
+
+.bme__tool {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: none;
+    color: var(--bme-muted);
+    cursor: pointer;
+}
+
+.bme__tool:hover {
+    background: var(--bme-bg-muted);
+    border-color: var(--bme-border);
+    color: inherit;
+}
+
+.bme__tool-text {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+/* Write area */
+.bme__textarea {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    padding: 10px 12px;
+    font: inherit;
+    resize: vertical;
+    outline: none;
+}
+
+/* Read-only: render just the content, without the editor chrome. */
+.bme--readonly {
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+}
+
+.bme--readonly .bme__preview {
+    padding: 0;
+    min-height: 0;
+}
+
+/* Preview */
+.bme__preview {
+    padding: 12px;
+    min-height: 80px;
+}
+
+.bme__preview-empty {
+    color: var(--bme-muted);
+    font-style: italic;
+    margin: 0;
+}
+
+/* Preview content is produced via MarkupString, so ::deep is needed to reach it. */
+.bme__preview ::deep > *:first-child {
+    margin-top: 0;
+}
+
+.bme__preview ::deep > *:last-child {
+    margin-bottom: 0;
+}
+
+.bme__preview ::deep h1,
+.bme__preview ::deep h2,
+.bme__preview ::deep h3,
+.bme__preview ::deep h4,
+.bme__preview ::deep h5,
+.bme__preview ::deep h6 {
+    margin: 16px 0 8px;
+    line-height: 1.25;
+}
+
+.bme__preview ::deep h1 {
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--bme-border);
+}
+
+.bme__preview ::deep h2 {
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--bme-border);
+}
+
+.bme__preview ::deep a {
+    color: var(--bme-accent);
+    text-decoration: none;
+}
+
+.bme__preview ::deep a:hover {
+    text-decoration: underline;
+}
+
+.bme__preview ::deep table {
+    border-collapse: collapse;
+    margin: 8px 0;
+}
+
+.bme__preview ::deep th,
+.bme__preview ::deep td {
+    border: 1px solid var(--bme-border);
+    padding: 6px 12px;
+    text-align: left;
+}
+
+.bme__preview ::deep th {
+    background: var(--bme-bg-muted);
+}
+
+.bme__preview ::deep ul,
+.bme__preview ::deep ol {
+    padding-left: 24px;
+}
+
+.bme__preview ::deep hr {
+    height: 1px;
+    margin: 16px 0;
+    border: 0;
+    background: var(--bme-border);
+}
+
+.bme__preview ::deep blockquote {
+    margin: 8px 0;
+    padding: 0 12px;
+    color: var(--bme-muted);
+    border-left: 3px solid var(--bme-border);
+}
+
+.bme__preview ::deep code {
+    padding: 2px 5px;
+    background: var(--bme-bg-muted);
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.bme__preview ::deep pre {
+    margin: 8px 0;
+    padding: 12px;
+    background: var(--bme-bg-muted);
+    border-radius: 6px;
+    overflow: auto;
+}
+
+.bme__preview ::deep pre code {
+    padding: 0;
+    background: none;
+    font-size: inherit;
+}
