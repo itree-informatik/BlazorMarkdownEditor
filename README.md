@@ -102,6 +102,38 @@ the `.hljs` styles in your app, or replace the bundled theme.
 > highlight.js is included under the BSD-3-Clause license — see
 > `wwwroot/highlight/LICENSE`.
 
+## Releasing
+
+Releases are published to nuget.org by CI (`.github/workflows/ci.yml`, job
+`publish`) when a version tag is pushed. The tag is the single source of truth
+for the package version — the csproj carries no version.
+
+```bash
+git tag v1.2.3
+git push origin v1.2.3
+```
+
+The `publish` job runs in the GitHub environment **`release`**, which requires a
+manual approval before the package is pushed. A tag that is re-pushed (moved) or
+a re-run of an already published version fails on purpose — nuget.org versions
+are immutable; publish a new version instead.
+
+Publishing uses nuget.org **Trusted Publishing** (OIDC), so no long-lived API key
+is stored anywhere. The moving parts outside this repository are:
+
+| Where | What | Notes |
+|-------|------|-------|
+| GitHub → repo secrets | `NUGET_USER` | The nuget.org **profile name** of the account that owns the trusted-publishing policy (not an e-mail address). |
+| nuget.org → Trusted Publishing | Policy for this repo | Repository owner `itree-informatik`, repository `BlazorMarkdownEditor`, workflow file **`ci.yml`** (file name only), environment `release`. Scope the policy to the `BlazorMarkdownEditor` package with *Push new versions* only. |
+| GitHub → environments | `release` | Required reviewer(s); deployment tag rule `v*`. |
+| GitHub → rulesets | `v*` tags | Only repository admins may create, move or delete version tags. |
+
+Things that silently break the policy match and make the `NuGet login` step
+fail with an opaque 4xx: renaming `ci.yml`, moving the `publish` job to another
+workflow file, changing the environment name, or the person who created the
+policy leaving the nuget.org organization (the policy then becomes inactive and
+has to be recreated by another owner).
+
 ## License
 
-[MIT](LICENSE) © itree informatik GmbH
+[MIT](https://github.com/itree-informatik/BlazorMarkdownEditor/blob/main/LICENSE) © itree informatik GmbH

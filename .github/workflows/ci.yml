@@ -3,18 +3,22 @@ name: CI
 on:
   push:
     branches: [main]
-    tags: ['v*']
+    tags: ['v[0-9]*'] # version tags only (v1.2.3); "vnext" etc. never reach the publish job
   pull_request:
     branches: [main]
+
+# Least privilege for every job; `publish` adds id-token: write below.
+permissions:
+  contents: read
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
 
@@ -30,18 +34,21 @@ jobs:
   publish:
     # Publish to nuget.org only for version tags (v1.2.3 → package version 1.2.3).
     # Uses Trusted Publishing (OIDC) — no long-lived API key; the matching policy
-    # is configured on nuget.org (repository owner/name + this workflow file).
+    # is configured on nuget.org (repository owner/name + this workflow file name).
+    # The `release` environment requires a manual approval before the OIDC token
+    # is minted. See README → Releasing for the full setup.
     if: startsWith(github.ref, 'refs/tags/v')
     needs: build-and-test
     runs-on: ubuntu-latest
+    environment: release
     permissions:
       contents: read
       id-token: write # GitHub OIDC token for the nuget.org token exchange
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: 10.0.x
 
@@ -52,15 +59,21 @@ jobs:
           --output ./artifacts
           -p:Version=${GITHUB_REF_NAME#v}
 
+      # Pinned to a commit SHA: this step receives the OIDC token and returns the
+      # publish key, so a moved `v1` tag must not be able to swap its code.
+      # Dependabot (.github/dependabot.yml) bumps the pin via PR.
       - name: NuGet login (OIDC → temp API key)
-        uses: NuGet/login@v1
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
         id: login
         with:
           user: ${{ secrets.NUGET_USER }}
 
+      # No --skip-duplicate: a re-pushed tag or a re-run must fail loudly
+      # instead of reporting a green publish while nuget.org keeps the old bits.
       - name: Push to nuget.org
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
         run: >
           dotnet nuget push ./artifacts/*.nupkg
-          --api-key ${{ steps.login.outputs.NUGET_API_KEY }}
+          --api-key "$NUGET_API_KEY"
           --source https://api.nuget.org/v3/index.json
-          --skip-duplicate

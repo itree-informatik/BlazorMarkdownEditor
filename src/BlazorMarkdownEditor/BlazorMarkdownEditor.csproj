@@ -11,7 +11,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <PackageId>BlazorMarkdownEditor</PackageId>
-    <Version>1.0.0</Version>
+    <!-- Version is set by CI from the git tag (v1.2.3 → -p:Version=1.2.3); local builds use the SDK default. -->
     <Authors>itree informatik GmbH</Authors>
     <Company>itree informatik GmbH</Company>
     <Product>BlazorMarkdownEditor</Product>
@@ -22,7 +22,15 @@
     <RepositoryType>git</RepositoryType>
     <PackageProjectUrl>https://github.com/itree-informatik/BlazorMarkdownEditor</PackageProjectUrl>
     <RepositoryUrl>https://github.com/itree-informatik/BlazorMarkdownEditor</RepositoryUrl>
-    <PackageReleaseNotes>Initial release: Write/Preview tabs, formatting toolbar (headings, bold, italic, lists, links, tables), dependency-free Markdown rendering.</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/itree-informatik/BlazorMarkdownEditor/releases</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <!-- Deterministic, debuggable builds: embed the PDB so consumers get SourceLink stepping
+       (SourceLink for GitHub is on by default in the .NET SDK) and normalize paths on CI. -->
+  <PropertyGroup>
+    <DebugType>embedded</DebugType>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup>
