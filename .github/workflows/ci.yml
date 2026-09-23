@@ -29,7 +29,9 @@ jobs:
         run: dotnet build BlazorMarkdownEditor.slnx --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test BlazorMarkdownEditor.slnx --configuration Release --no-build
+        # global.json opts dotnet test into Microsoft.Testing.Platform (required by
+        # xunit.v3 4.x on the .NET 10 SDK), which takes the solution via --solution.
+        run: dotnet test --solution BlazorMarkdownEditor.slnx --configuration Release --no-build
 
   publish:
     # Publish to nuget.org only for version tags (v1.2.3 → package version 1.2.3).
