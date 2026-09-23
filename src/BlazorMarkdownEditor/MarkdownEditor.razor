@@ -50,12 +50,16 @@
             }
         </div>
 
+        @* @bind (instead of value= + @oninput) makes Blazor sync its render tree to what
+           the user typed, so re-rendering doesn't write textarea.value back. A stale
+           write (Blazor Server latency, async ValueChanged handlers) resets the caret. *@
         <textarea id="@_textAreaId"
                   class="bme__textarea"
-                  value="@Value"
                   placeholder="@Placeholder"
                   rows="@Rows"
-                  @oninput="OnInput"></textarea>
+                  @bind:get="Value"
+                  @bind:set="OnInputAsync"
+                  @bind:event="oninput"></textarea>
     }
 
     @if (!Readonly && ValueExpression is not null && CascadedEditContext is not null)

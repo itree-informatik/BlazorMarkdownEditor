@@ -112,9 +112,9 @@ public partial class MarkdownEditor : ComponentBase, IAsyncDisposable
             await _module.InvokeVoidAsync("highlight", _previewId);
     }
 
-    private async Task OnInput(ChangeEventArgs e)
+    private async Task OnInputAsync(string value)
     {
-        Value = e.Value?.ToString() ?? string.Empty;
+        Value = value ?? string.Empty;
         await ValueChanged.InvokeAsync(Value);
     }
 
